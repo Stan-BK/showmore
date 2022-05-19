@@ -1,32 +1,72 @@
 ;(function() {
-  const showMore = document.createElement('span')
-  showMore.innerText = '显示'
-  showMore.style = `
-    position: absolute;
-    right: 0;
-    bottom: 0;
-    vertical-align: middle;
-    background-color: white;
-  `
-  const collections = document.getElementsByClassName('showmore')
-  function fitContent(
-    elem
-  ) {
-    const parent = elem.parentNode
-    const { width: w, height: h } = getComputedStyle(elem)
-    const { width: pw, height: ph, overflow, whiteSpace } = getComputedStyle(parent)
-    if (overflow.split(' ')[0] !== 'hidden') {
-      parent.style.overflowX = 'hidden'
+  function ShowMore({ wrap, callback, isMultiline, text = '显示更多' }) {
+    wrap = document.querySelector(wrap)
+    const collections = wrap.getElementsByClassName('showmore')
+    function fitContent(
+      elem
+    ) {
+      const parent = elem.parentNode
+      if (!isMultiline) {
+        parent.style.overflowX = 'hidden'
+        parent.style.whiteSpace = 'nowrap'
+      }
+      const { width: w, height: h } = elem.getBoundingClientRect()
+      const { overflow, backgroundColor } = getComputedStyle(parent)
+      if (overflow.split(' ')[0] !== 'hidden') {
+        parent.style.overflowX = 'hidden'
+      }
+      addShowMore(parent, backgroundColor, elem)
+      var observer = new ResizeObserver((list) => {
+        let info = list[0]
+        let { width: cw, height: ch } = info.contentRect
+        let target = info.target
+        let __showmore = target.getElementsByClassName('__showmore')[0]
+        if (cw <= w) {
+          if (isMultiline && ch <= 2 * h)
+            __showmore.style.display = 'inline-block'
+        } else {
+          __showmore.style.display = 'none'
+        }
+      })
+      observer.observe(wrap)
     }
-    if (whiteSpace !== 'nowrap') {
-      
+    function addShowMore(
+      elem,
+      bgc,
+      target
+    ) {
+      const showMore = document.createElement('span')
+      showMore.innerText = text
+      showMore.className = '__showmore'
+      showMore.style = `
+        display: inline-block;
+        position: absolute;
+        right: 0;
+        ${isMultiline ? 'bottom' : 'top'}: 0;
+        vertical-align: middle;
+        background: radial-gradient(${bgc} 70%, transparent);
+        color: deepskyblue;
+        padding: 0 2px;
+        box-shadow: 1px 1px 10px ${bgc} inset;
+        cursor: pointer;
+      `
+      showMore.addEventListener('click', function() {
+        callback(showMore, target, elem)
+      })
+      elem.appendChild(showMore)
     }
-
-    if (pw <= w || ph <= h) {
-      parent.appendChild(showMore.cloneNode(true))
+    for (var i = 0; i < collections.length; i++) {
+      fitContent(collections[i])
     }
   }
-  for (var i = 0; i < collections.length; i++) {
-    fitContent(collections[i])
-  }
+  window.ShowMore = ShowMore
 })()
+function callback(...args) {
+  console.log(args)
+}
+ShowMore({
+  wrap: '#wrap',
+  callback,
+  isMultiline: true,
+  text: '更多'
+})
