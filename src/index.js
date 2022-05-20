@@ -48,11 +48,13 @@
         color: deepskyblue;
         padding: 0 2px;
         box-shadow: 1px 1px 10px ${bgc} inset;
-        cursor: pointer;
+        cursor: ${ callback ? 'pointer' : 'auto' };
       `
-      showMore.addEventListener('click', function() {
-        callback(showMore, target, elem)
-      })
+      if (callback) {
+        showMore.addEventListener('click', function() {
+          callback(showMore, target, elem)
+        })
+      }
       elem.appendChild(showMore)
     }
     for (var i = 0; i < collections.length; i++) {
@@ -61,12 +63,3 @@
   }
   window.ShowMore = ShowMore
 })()
-function callback(...args) {
-  console.log(args)
-}
-ShowMore({
-  wrap: '#wrap',
-  callback,
-  isMultiline: true,
-  text: '更多'
-})
