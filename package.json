@@ -1,6 +1,6 @@
 {
   "name": "bk-showmore",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "a solution of hidden overflow content",
   "main": "src/index.cjs",
   "scripts": {

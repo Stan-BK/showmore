@@ -7,11 +7,11 @@ npm install bk-showmore
 ```
 ## CommonJS
 ```
-const ShowMore = require('showmore')
+const ShowMore = require('bk-showmore')
 ```
 ## ESM
 ```
-import ShowMore from 'showmore'
+import ShowMore from 'bk-showmore'
 ```
 # Usage
 ```html
