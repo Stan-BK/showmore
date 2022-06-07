@@ -1,8 +1,14 @@
 {
   "name": "bk-showmore",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "a solution of hidden overflow content",
   "main": "src/index.cjs",
+  "exports": {
+    ".": {
+      "require": "./src/index.cjs",
+      "import": "./src/index.mjs"
+    }
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
