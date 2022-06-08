@@ -29,3 +29,15 @@ ShowMore({
   color: 'deepskyblue' // 'showmore' button's color
 })
 ```
+```vue
+// need to use after the real DOM is rendered
+// an example in Vue3
+onMounted(() => {
+  nextTick(() => {
+    ShowMore({
+      wrap: '#app'
+    })
+  })
+})
+
+```
